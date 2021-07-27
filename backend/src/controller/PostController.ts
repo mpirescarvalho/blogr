@@ -38,7 +38,52 @@ export default class PostController {
     }
   }
 
-  async show() {
+  async show(req: Request, res: Response) {
+    try {
+      const { post_id } = req.params;
+      const { html } = req.query
 
+      if (!post_id) {
+        return res.status(400).json({
+          error: 'bad request'
+        })
+      }
+
+      const prismic = getPrismicClient(req);
+      const response = await prismic.getByUID('post', post_id, {});
+
+      if (!response || !response.data) {
+        return res.status(404).json({
+          error: 'post not found'
+        })
+      }
+
+      const post = {
+        slug: post_id,
+        title: RichText.asText(response.data.title),
+        content: '',
+        updatedAt: new Date(response.last_publication_date).toLocaleDateString(
+          'pt-BR',
+          {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+          }
+        ),
+      };
+
+      if (html) {
+        post.content = RichText.asHtml(response.data.content)
+      } else {
+        post.content = RichText.asText(response.data.content);
+      }
+
+      return res.json(post);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        error: 'internal server error'
+      })
+    }
   }
 }
