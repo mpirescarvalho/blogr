@@ -24,7 +24,7 @@ export function PostList({ posts }: PostListProps) {
 						</h2>
 						<p>{post.excerpt}</p>
 
-						<div className="mt-2 d-flex">
+						<footer className="mt-2 d-flex">
 							<span className="d-flex align-items-center">
 								<img
 									src="/images/calendar.svg"
@@ -38,7 +38,7 @@ export function PostList({ posts }: PostListProps) {
 								<img src="/images/user.svg" alt="Visualizações" className="mr-2" />
 								{post.viewCount} visualizações
 							</span>
-						</div>
+						</footer>
 					</div>
 				</Link>
 			))}
