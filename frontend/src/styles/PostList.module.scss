@@ -1,0 +1,14 @@
+.container {
+	h2 {
+		transition: color 0.2s;
+	}
+
+	> div {
+		cursor: pointer;
+		&:hover {
+			h2 {
+				color: #ff57b2;
+			}
+		}
+	}
+}
