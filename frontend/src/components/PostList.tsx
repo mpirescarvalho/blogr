@@ -6,7 +6,7 @@ type Post = {
 	title: string;
 	excerpt: string;
 	updatedAt: string;
-	viewCount: number;
+	viewCount?: number;
 };
 
 interface PostListProps {
@@ -34,7 +34,7 @@ export function PostList({ posts }: PostListProps) {
 								{post.updatedAt}
 							</span>
 
-							<span className="ml-3 d-flex align-items-center">
+							<span className={`ml-3 d-flex align-items-center ${styles.visibleAnimation} ${typeof post.viewCount !== 'undefined' ? styles.visible : ''}`}>
 								<img src="/images/user.svg" alt="Visualizações" className="mr-2" />
 								{post.viewCount} visualizações
 							</span>

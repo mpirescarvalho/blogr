@@ -1,4 +1,6 @@
 .postContainer {
+	word-wrap: break-word;
+
 	pre {
 		color: white;
 		background-color: var(--gray-800);
@@ -18,4 +20,13 @@
 			margin: 0.5rem 0;
 		}
 	}
+}
+
+.visibleAnimation {
+	opacity: 0;	
+	transition: opacity 0.3s;
+}
+
+.visible {
+	opacity: 1;
 }

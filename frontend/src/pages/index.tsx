@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import { Header } from '../components/Header';
@@ -9,7 +10,7 @@ type Post = {
 	title: string;
 	excerpt: string;
 	updatedAt: string;
-	viewCount: number;
+	viewCount?: number;
 };
 
 interface HomeProps {
@@ -18,22 +19,46 @@ interface HomeProps {
 
 export default function Home({ posts }: HomeProps) {
 	const [search, setSearch] = useState('');
-	const [postList, setPostList] = useState<Post[]>(posts);
+	const [postsWithViewCount, setPostsWithViewCount] = useState<Post[]>(posts)
+	const [postList, setPostList] = useState<Post[]>(postsWithViewCount);
 
 	useEffect(() => {
 		if (!search) {
-			return setPostList(posts);
+			return setPostList(postsWithViewCount);
 		}
 
-		setPostList((posts) =>
-			posts.filter(
-				(post) => post.title.includes(search) || post.excerpt.includes(search)
-			)
-		);
-	}, [search, posts]);
+		function normalizeStr(str: string) {
+			const result = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
+			return result;
+		}
+
+		const normalizedSearch = normalizeStr(search)
+
+		const newPostList = postsWithViewCount.filter(
+			(post) => normalizeStr(post.title).includes(normalizedSearch) || normalizeStr(post.excerpt).includes(normalizedSearch)
+		)
+
+		setPostList(newPostList)
+	}, [search, postsWithViewCount]);
+
+	useEffect(() => {
+		posts.forEach(async post => {
+			const response = await api.get(`/posts/${post.slug}/views`)
+			const viewCount = response.data.count
+
+			setPostsWithViewCount(posts => posts.map(oldPost => oldPost.slug === post.slug ? {
+				...post,
+				viewCount
+			} : oldPost))
+		})
+	}, [posts]);
 
 	return (
 		<>
+			<Head>
+				<title>Blogr</title>
+			</Head>
+
 			<Header search={search} onSearch={setSearch} />
 			<PostList posts={postList} />
 		</>
@@ -43,20 +68,10 @@ export default function Home({ posts }: HomeProps) {
 export const getStaticProps: GetStaticProps = async () => {
 	const response = await api.get('/posts');
 
-	const posts = await Promise.all(
-		response.data.map(async (post) => {
-			const viewCountResponse = await api.get(`/posts/${post.slug}/views`);
-
-			return {
-				...post,
-				viewCount: viewCountResponse.data.count,
-			};
-		})
-	);
-
 	return {
 		props: {
-			posts,
+			posts: response.data,
 		},
+		revalidate: 60 * 30 // 30 minutes
 	};
 };

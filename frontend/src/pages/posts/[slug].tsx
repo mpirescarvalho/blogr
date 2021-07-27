@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import { Header } from '../../components/Header';
@@ -33,6 +34,10 @@ export default function Post({ post }: PostProps) {
 
 	return (
 		<>
+			<Head>
+				<title>{post.title} | Blogr</title>
+			</Head>
+
 			<Header showSearch={false} />
 
 			<main className="container text-light">
@@ -52,12 +57,10 @@ export default function Post({ post }: PostProps) {
 								{post.updatedAt}
 							</span>
 
-							{typeof viewCount !== 'undefined' && (
-								<span className="ml-3 d-flex align-items-center">
-									<img src="/images/user.svg" alt="Visualizações" className="mr-2" />
-									{viewCount} visualizações
-								</span>
-							)}
+							<span className={`ml-3 d-flex align-items-center ${styles.visibleAnimation} ${typeof viewCount !== 'undefined' ? styles.visible : ''}`}>
+								<img src="/images/user.svg" alt="Visualizações" className="mr-2" />
+								{viewCount} visualizações
+							</span>
 						</div>
 					</header>
 
