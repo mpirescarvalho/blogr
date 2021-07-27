@@ -21,13 +21,16 @@ export function Header({ showSearch = true, search, onSearch }: HeaderProps) {
 		<nav className="navbar navbar-expand-lg bg-dark navbar-dark mt-5">
 			<div className="container">
 				<Link href="/">
-					<img
-						className="navbar-brand"
-						src="/images/logo.svg"
-						style={{
-							cursor: 'pointer',
-						}}
-					/>
+					<a>
+						<img
+							className="navbar-brand"
+							src="/images/logo.svg"
+							style={{
+								cursor: 'pointer',
+							}}
+							alt="Blogr"
+						/>
+					</a>
 				</Link>
 
 				<button

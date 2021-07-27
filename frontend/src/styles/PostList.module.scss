@@ -3,9 +3,13 @@
 		transition: color 0.2s;
 	}
 
-	> div {
+	> a {
+		text-decoration: none;
 		cursor: pointer;
+
 		&:hover {
+			background-color: transparent !important;
+
 			h2 {
 				color: #ff57b2;
 			}

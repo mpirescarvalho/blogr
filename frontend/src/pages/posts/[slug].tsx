@@ -29,7 +29,7 @@ export default function Post({ post }: PostProps) {
 			}
 		}
 		handleViewCount();
-	}, []);
+	}, [post]);
 
 	return (
 		<>

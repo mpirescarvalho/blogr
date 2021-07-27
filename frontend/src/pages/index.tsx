@@ -30,7 +30,7 @@ export default function Home({ posts }: HomeProps) {
 				(post) => post.title.includes(search) || post.excerpt.includes(search)
 			)
 		);
-	}, [search]);
+	}, [search, posts]);
 
 	return (
 		<>

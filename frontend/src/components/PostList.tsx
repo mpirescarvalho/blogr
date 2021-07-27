@@ -18,7 +18,7 @@ export function PostList({ posts }: PostListProps) {
 		<div className={`container ${styles.container}`}>
 			{posts.map((post) => (
 				<Link key={post.slug} href={`/posts/${post.slug}`}>
-					<div className="card border-0 bg-dark text-light py-3 mt-4">
+					<a className="card border-0 text-light py-3 mt-4 bg-transparent">
 						<h2>
 							<strong>{post.title}</strong>
 						</h2>
@@ -39,7 +39,7 @@ export function PostList({ posts }: PostListProps) {
 								{post.viewCount} visualizações
 							</span>
 						</footer>
-					</div>
+					</a>
 				</Link>
 			))}
 		</div>
